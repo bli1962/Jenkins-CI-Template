@@ -1,11 +1,11 @@
 <Project DefaultTargets="CopyOutputs;DeployService" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
 
-  <!-- These settings control what the service's name, description etc appear in services.msc task panel. -->
+	<!-- These settings control what the service's name, description etc appear in services.msc task panel. -->
 	<PropertyGroup Label="ServiceMetaData">
 		<ServiceName>MyWindowsService</ServiceName>
 		<ServiceDisplayName>My Windows Service (Jenkins CI test)</ServiceDisplayName>
 		<ServiceDescription>A new service, that changes the world for the greater good.</ServiceDescription>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+		<TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
 	</PropertyGroup>
 
 	<Choose>
@@ -33,8 +33,7 @@
 
 	<Target Name="DeployService">
 		
-		<Exec Command="safeServiceStop $(ServiceName) $(DeploymentServer) $(DeploymentReason)" />
-		
+		<Exec Command="safeServiceStop $(ServiceName) $(DeploymentServer) $(DeploymentReason)" />		
 		<Exec Command="safeServiceDelete $(ServiceName) $(DeploymentServer)" ContinueOnError="true" />
 		<Exec Command="sc $(DeploymentServer) create $(ServiceName) binPath= &quot;$(ServiceExecutablePath)&quot; start= delayed-auto displayName= &quot;$(ServiceDisplayName)&quot;" />
 		<Exec Command="sc $(DeploymentServer) description $(ServiceName) &quot;$(ServiceDescription)&quot;" />
@@ -71,15 +70,14 @@
     generate the correct results.
     -->
 	<Target Name="Rebuild"
-		  Condition="'$(ImportProjectFile)'=='true'"
-		  DependsOnTargets="$(BuildDependsOn)"
-		  Outputs="@(AllOutputs->'%(FullPath)')" >
+			  Condition="'$(ImportProjectFile)'=='true'"
+			  DependsOnTargets="$(BuildDependsOn)"
+			  Outputs="@(AllOutputs->'%(FullPath)')" >
 
 		<CreateItem Include="$(OutputPath)\**\*">
 			<Output ItemName="AllOutputs" TaskParameter="Include"/>
 		</CreateItem>
 
 		<Message Text="Custom build invoked!" Importance="high"/>
-
 	</Target>
 </Project>
